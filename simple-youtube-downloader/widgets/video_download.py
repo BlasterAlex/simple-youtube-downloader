@@ -1,11 +1,13 @@
 import os.path
 import re
 import sys
+import tempfile
 from datetime import timedelta
 
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt, QThread, pyqtSlot, QTimer, QElapsedTimer
 from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QLabel, QVBoxLayout, QProgressBar, QMessageBox
+from ffmpeg_progress_yield import FfmpegProgress
 from pytube import YouTube
 from .utils.get_youtube_thumbnail import *
 
@@ -13,6 +15,7 @@ from .utils.get_youtube_thumbnail import *
 class DownloadThread(QThread):
     download_signal = QtCore.pyqtSignal(float)
     download_exception = QtCore.pyqtSignal(str)
+    down_part = 1
     filesize = 0
     step = 0
 
@@ -21,10 +24,9 @@ class DownloadThread(QThread):
         self.url = url
         self.directory = directory
         self.fmt = fmt
-
-        # Удаление недопустимых символов из имени файла
-        title = re.sub(r'[\\/*?:"<>|]', "", title)
-        self.filename = self.get_available_filename(title)
+        self.title = re.sub(" +", " ", re.sub(r'[\\/*?:"<>|]', "", title))
+        if fmt == "mp3":
+            self.down_part = 0.5
 
     @pyqtSlot(str)
     def run(self):
@@ -35,26 +37,49 @@ class DownloadThread(QThread):
     def download(self):
         try:
             yt = YouTube(self.url)
-            yt.register_on_progress_callback(self.progress_bar)
+            yt.register_on_progress_callback(self.progress_func)
             if self.fmt == "mp3":
-                stream = yt.streams.filter(type="audio").first()
+                stream = yt.streams.filter(only_audio=True, file_extension="mp4").first()
+                self.filesize = stream.filesize
+                with tempfile.TemporaryDirectory() as tmp_dir:
+                    print("Created temporary directory:", tmp_dir)
+                    tmp_file_name = self.get_available_filename(tmp_dir, "mp4")
+                    tmp_file_mp4 = os.path.join(tmp_dir, tmp_file_name)
+                    stream.download(output_path=tmp_dir, filename=tmp_file_name)
+
+                    file_mp3_name = self.get_available_filename(self.directory, self.fmt)
+                    file_mp3 = os.path.join(self.directory, file_mp3_name)
+                    print("Converting file %s to %s" % (tmp_file_mp4, file_mp3))
+                    cmd = [
+                        "./ffmpeg/bin/ffmpeg.exe", '-i', tmp_file_mp4, file_mp3,
+                        "-f", "null", "/dev/null",
+                    ]
+                    ff = FfmpegProgress(cmd)
+                    for progress in ff.run_command_with_progress():
+                        progress = int((100 + progress) * self.down_part)
+                        self.download_signal.emit(progress)
+                    os.remove(tmp_file_mp4)
+
             else:
                 stream = yt.streams.filter(progressive=True, file_extension="mp4").first()
-            self.filesize = stream.filesize
-            stream.download(output_path=self.directory, filename=self.filename)
+                self.filesize = stream.filesize
+                stream.download(
+                    output_path=self.directory,
+                    filename=self.get_available_filename(self.directory, self.fmt)
+                )
         except:
             self.download_exception.emit(str(sys.exc_info()[1]))
 
-    def progress_bar(self, chunk, file_handle, bytes_remaining):
-        remaining = (100 * bytes_remaining) / self.filesize
-        self.step = 100 - int(remaining)
+    def progress_func(self, chunk, file_handle, bytes_remaining):
+        remaining = (100 * self.down_part * bytes_remaining) / self.filesize
+        self.step = 100 * self.down_part - int(remaining)
         self.download_signal.emit(self.step)
 
-    def get_available_filename(self, title: str) -> str:
+    def get_available_filename(self, directory: str, fmt: str) -> str:
         file_counter = 1
-        filename = "%s.%s" % (title, self.fmt)
-        while os.path.isfile(os.path.join(self.directory, filename)):
-            filename = "%s (%d).%s" % (title, file_counter, self.fmt)
+        filename = "%s.%s" % (self.title, fmt)
+        while os.path.isfile(os.path.join(directory, filename)):
+            filename = "%s (%d).%s" % (self.title, file_counter, fmt)
             file_counter += 1
         if file_counter != 1:
             print("File with same name exists, using filename: \"%s\"" % filename)
