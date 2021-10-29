@@ -56,7 +56,7 @@ class DownloadThread(QThread):
                     ]
                     ff = FfmpegProgress(cmd)
                     for progress in ff.run_command_with_progress():
-                        progress = int((100 + progress) * self.down_part)
+                        progress = int(100 * self.down_part + progress * (1 - self.down_part))
                         self.download_signal.emit(progress)
                     os.remove(tmp_file_mp4)
 
