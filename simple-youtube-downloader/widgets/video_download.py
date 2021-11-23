@@ -178,7 +178,6 @@ class VideoDownload(QGroupBox):
             msg.setWindowTitle("Ошибка скачивания")
             msg.setDetailedText("Exception: " + message)
             msg.exec()
-        self.deleteLater()
 
     # def open_directory(self):
     #     QDesktopServices.openUrl(QUrl("file:///" + self.directory))
