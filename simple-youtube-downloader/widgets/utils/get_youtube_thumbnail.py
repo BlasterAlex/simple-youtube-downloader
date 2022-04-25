@@ -1,19 +1,20 @@
 import urllib.request
+
 from PyQt5.QtCore import QRect
 from PyQt5.QtGui import QPixmap, QImage
 
 
-# Получить youtube thumbnail
+# Get youtube thumbnail
 def get_youtube_thumbnail(url: str, width: int = -1) -> QPixmap:
     data = urllib.request.urlopen(url).read()
     image = QImage()
     image.loadFromData(data)
 
     img_width = image.width()
-    img_height = img_width * 9 / 16
+    img_height = int(img_width * 9 / 16)
     rect = QRect(
         0,
-        (image.height() - img_height) / 2,
+        int((image.height() - img_height) / 2),
         img_width,
         img_height,
     )

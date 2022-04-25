@@ -1,7 +1,9 @@
 from datetime import timedelta
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QGroupBox, QVBoxLayout, QHBoxLayout, QLabel
 from pytube import YouTube, Channel
+
 from .utils.get_youtube_thumbnail import *
 
 
@@ -10,12 +12,12 @@ class VideoInfo(QGroupBox):
     def __init__(self, yt: YouTube, parent=None):
         super().__init__(parent)
 
-        # Информационный виджет
+        # Info widget
         self.setStyleSheet("QGroupBox {border: none}")
         self.setMaximumHeight(100)
         layout = QHBoxLayout(self)
 
-        # Картинка видео
+        # Video thumbnail
         image = get_youtube_thumbnail(yt.thumbnail_url, 150)
         video_image = QLabel(self)
         video_image.setPixmap(image)
@@ -23,7 +25,7 @@ class VideoInfo(QGroupBox):
         video_image.setAlignment(Qt.AlignLeft | Qt.AlignTop)
         layout.addWidget(video_image)
 
-        # Информация
+        # Information
         info_layout = QVBoxLayout()
         title = QLabel("Название: <b>%s</b>" % yt.title, self)
         title.setStyleSheet("QLabel{font-size: 8pt;}")
