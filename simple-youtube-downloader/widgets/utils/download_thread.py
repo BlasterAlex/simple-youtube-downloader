@@ -67,8 +67,8 @@ class DownloadThread(QThread):
                     filename=self.get_available_filename(self.directory, self.fmt)
                 )
         except:
-            self.download_exception.emit(str(sys.exc_info()[1]))
             logging.error(traceback.format_exc())
+            self.download_exception.emit(str(sys.exc_info()[1]))
 
     def progress_func(self, chunk, file_handle, bytes_remaining):
         remaining = (100 * self.down_part * bytes_remaining) / self.filesize
