@@ -23,7 +23,7 @@ class DownloadThread(QThread):
         self.url = url
         self.directory = directory
         self.fmt = fmt
-        self.title = re.sub(' +', ' ', re.sub(r'[\\/*?:"<>|]', '', title)).encode('ascii', 'ignore').decode().strip()
+        self.title = re.sub(' +', ' ', re.sub(r'[\\/*?:"<>|]', '', title)).encode('utf-8', 'ignore').decode().strip()
         if fmt == 'mp3':
             self.down_part = 0.5
 
