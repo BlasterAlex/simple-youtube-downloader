@@ -15,7 +15,7 @@ from widgets.video_info import VideoInfo
 
 
 def read_settings_yaml(file_path: str):
-    with open(file_path, "r") as config_file:
+    with open(file_path, "r", encoding='utf-8') as config_file:
         return yaml.load(config_file, Loader=yaml.FullLoader)
 
 
