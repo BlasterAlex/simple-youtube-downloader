@@ -4,7 +4,7 @@ from PyQt5.QtCore import QRect
 from PyQt5.QtGui import QPixmap, QImage
 
 
-# Get youtube thumbnail
+# Get YouTube thumbnail
 def get_youtube_thumbnail(url: str, width: int = -1) -> QPixmap:
     data = urllib.request.urlopen(url).read()
     image = QImage()

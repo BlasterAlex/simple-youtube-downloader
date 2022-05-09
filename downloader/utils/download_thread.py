@@ -4,11 +4,11 @@ import re
 import sys
 import tempfile
 import traceback
+
 from PyQt5 import QtCore
 from PyQt5.QtCore import QThread, pyqtSlot
 from ffmpeg_progress_yield import FfmpegProgress
-
-from pytube import YouTube # noqa
+from pytube import YouTube  # noqa
 
 
 class DownloadThread(QThread):

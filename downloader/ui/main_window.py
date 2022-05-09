@@ -8,10 +8,10 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QLineEdit, QHBoxLayout, QPushButton, QLayout, \
     QScrollArea
+from pytube import YouTube  # noqa
 
-from pytube import YouTube # noqa
-from widgets.video_download import VideoDownload
-from widgets.video_info import VideoInfo
+from downloader.ui.widgets.video_download import VideoDownload
+from downloader.ui.widgets.video_info import VideoInfo
 
 
 def read_settings_yaml(file_path: str):

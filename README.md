@@ -36,7 +36,7 @@ Application with GUI for downloading videos from YouTube in mp3/mp4 format using
 Run simple-youtube-downloader in terminal:
 
 ```shell
-python simple-youtube-downloader
+python -m downloader
 ```
 
 Or use [scripts/run.vbs](scripts/run.vbs) to run the application without a terminal. You can create a desktop shortcut for this script.

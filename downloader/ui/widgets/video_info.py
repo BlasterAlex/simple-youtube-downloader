@@ -1,9 +1,10 @@
 from datetime import timedelta
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QGroupBox, QVBoxLayout, QHBoxLayout, QLabel
+from pytube import YouTube, Channel  # noqa
 
-from pytube import YouTube, Channel # noqa
-from utils.get_youtube_thumbnail import get_youtube_thumbnail  # noqa
+from downloader.utils.get_youtube_thumbnail import get_youtube_thumbnail
 
 
 class VideoInfo(QGroupBox):

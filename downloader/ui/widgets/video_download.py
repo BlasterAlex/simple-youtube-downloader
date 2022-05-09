@@ -1,10 +1,11 @@
 from datetime import timedelta
+
 from PyQt5.QtCore import Qt, QTimer, QElapsedTimer
 from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QLabel, QVBoxLayout, QProgressBar, QMessageBox
+from pytube import YouTube  # noqa
 
-from pytube import YouTube # noqa
-from utils.download_thread import DownloadThread  # noqa
-from utils.get_youtube_thumbnail import get_youtube_thumbnail  # noqa
+from downloader.utils.download_thread import DownloadThread
+from downloader.utils.get_youtube_thumbnail import get_youtube_thumbnail
 
 
 class VideoDownload(QGroupBox):
