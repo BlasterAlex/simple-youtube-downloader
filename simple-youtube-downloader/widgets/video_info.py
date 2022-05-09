@@ -1,11 +1,8 @@
-import sys
 from datetime import timedelta
-
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QGroupBox, QVBoxLayout, QHBoxLayout, QLabel
-from pytube import YouTube, Channel
 
-sys.path.insert(0, '..')
+from pytube import YouTube, Channel # noqa
 from utils.get_youtube_thumbnail import get_youtube_thumbnail  # noqa
 
 
