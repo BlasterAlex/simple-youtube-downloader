@@ -7,7 +7,7 @@ for %%a in (%~dp0\.) do set projectDir=%%~dpa
 cmd /c "cd %projectDir% & git pull & git submodule update --init --recursive" || goto :end
 
 @REM Checkout pytube master
-cmd /c "cd %projectDir%/pytube & git checkout master" || goto :end
+cmd /c "cd %projectDir%/pytube & git checkout master & git pull" || goto :end
 
 @REM Create pytube binary file
 cmd /c "cd %projectDir%/pytube/scripts & pip install wheel & create_wheel" || goto :end
