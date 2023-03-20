@@ -113,6 +113,7 @@ class MainWindow(QMainWindow):
 
     # Create download
     def create_download(self):
+        logging.info('Download video %s' % self.link.text())
         yt = self.check_video_available()
         if yt:
             download = VideoDownload(yt, self.settings['DOWNLOAD_DIR'], self.settings['FORMAT'], self.main_widget)
