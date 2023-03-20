@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import os
+import traceback
 
 import yaml
 from PyQt5.QtCore import Qt
@@ -116,5 +117,8 @@ class MainWindow(QMainWindow):
         logging.info('Download video %s' % self.link.text())
         yt = self.check_video_available()
         if yt:
-            download = VideoDownload(yt, self.settings['DOWNLOAD_DIR'], self.settings['FORMAT'], self.main_widget)
-            self.downloads_layout.insertWidget(0, download)
+            try:
+                download = VideoDownload(yt, self.settings['DOWNLOAD_DIR'], self.settings['FORMAT'], self.main_widget)
+                self.downloads_layout.insertWidget(0, download)
+            except Exception:
+                logging.error(traceback.format_exc())
