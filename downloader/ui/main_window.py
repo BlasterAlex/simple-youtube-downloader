@@ -4,20 +4,17 @@ import logging
 import os
 import traceback
 
-import yaml
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QLineEdit, QHBoxLayout, QPushButton, QLayout, \
     QScrollArea
 from pytube import YouTube  # noqa
+from rich.pretty import pretty_repr
 
+from downloader.ui.widgets.menu_bar import MenuBar
 from downloader.ui.widgets.video_download import VideoDownload
 from downloader.ui.widgets.video_info import VideoInfo
-
-
-def read_settings_yaml(file_path: str):
-    with open(file_path, "r", encoding='utf-8') as config_file:
-        return yaml.load(config_file, Loader=yaml.FullLoader)
+from downloader.utils.settings import read_settings
 
 
 def clear_layout(layout: QLayout):
@@ -30,7 +27,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         # Reading app settings file
-        self.settings = read_settings_yaml(os.path.join("config", "settings.yml"))
+        self.settings = read_settings()
 
         # Logging settings
         logging.basicConfig(
@@ -46,9 +43,15 @@ class MainWindow(QMainWindow):
             ]
         )
 
+        logging.info('app settings: %s' % pretty_repr(self.settings))
+
         # App window title
         self.setWindowTitle("simple-youtube-downloader")
         self.setWindowIcon(QIcon(os.path.join("data", "icons", "icon.ico")))
+
+        # Menu bar
+        self.bar = MenuBar(self.settings, self)
+        self.setMenuBar(self.bar)
 
         # Main widget
         self.main_widget = QWidget(self)
