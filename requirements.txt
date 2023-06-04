@@ -4,4 +4,4 @@ PyQt5-Qt5==5.15.2
 PyQt5-sip==12.10.1
 PyQt5-stubs==5.15.6.0
 PyYAML~=6.0
-./pytube/dist/pytube-12.1.2-py3-none-any.whl
+./pytube/dist/pytube-15.0.0-py3-none-any.whl
