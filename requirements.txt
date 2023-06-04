@@ -1,7 +1,8 @@
-﻿ffmpeg-progress-yield==0.2.0
-PyQt5==5.15.6
+﻿ffmpeg-progress-yield==0.7.8
+PyQt5==5.15.9
 PyQt5-Qt5==5.15.2
-PyQt5-sip==12.10.1
+PyQt5-sip==12.12.1
 PyQt5-stubs==5.15.6.0
 PyYAML~=6.0
+rich~=13.4.1
 ./pytube/dist/pytube-15.0.0-py3-none-any.whl
